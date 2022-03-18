@@ -10,7 +10,7 @@ def recv():
             data, addr = s.recvfrom(1024)
             now = datetime.now().strftime("%H:%M:%S")
             print(f"[{now}] from {addr[0]}: {data.decode('utf-8')}")
-            s.sendto(b'Hello, %s!' % addr[0].encode('utf-8'), addr)
+            s.sendto(b'Hello, %s! This is server2' % addr[0].encode('utf-8'), addr)
 
 
 if __name__ == '__main__':
