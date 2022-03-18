@@ -180,7 +180,7 @@ class UdpRedirection(app_manager.RyuApp):
         ]
 
         self.logger.info('adding udp redirection flow')
-        self.add_flow(datapath, priority, match, actions, hard_timeout=10)
+        self.add_flow(datapath, priority, match, actions, hard_timeout=2)
 
         # reverse route
         reverse_match = parser.OFPMatch(in_port=server_port,
@@ -192,12 +192,12 @@ class UdpRedirection(app_manager.RyuApp):
         reverse_actions = [
             parser.OFPActionSetField(eth_src=self.SERVER1.mac),
             parser.OFPActionSetField(ipv4_src=self.SERVER1.ip),
-            parser.OFPActionSetField(udp_src=udp_dst),
+            parser.OFPActionSetField(udp_src=self.SERVER1.udp_port),
             parser.OFPActionOutput(in_port)
         ]
 
         self.logger.info('adding reverse udp redirection flow')
-        self.add_flow(datapath, priority, reverse_match, reverse_actions, hard_timeout=10)
+        self.add_flow(datapath, priority, reverse_match, reverse_actions, hard_timeout=0)
 
         if eth_src == self.SERVER1.mac or eth_src == self.SERVER2.mac:
             self.send_packet_out(msg, reverse_actions)
